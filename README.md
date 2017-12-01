@@ -8,6 +8,6 @@ Physual .NET is made with, depends on, borrows content from, was guided by, or i
 * [SFML.NET](https://www.sfml-dev.org/download/sfml.net): .NET bindings for SFML, the "Simple and Fast Multimedia Library"  
 * [VelcroPhysics](https://github.com/VelcroPhysics/VelcroPhysics): the .NET port of Box2d, a 2D physics engine for games  
 * [SFXR](http://www.drpetter.se/project_sfxr.html): a basic sound effects generator for games  
-* [Brainstorm](http://brainstorm.untergrund.net): the team who composed and produced the song "Axel Goes Funky"  
+* [Brainstorm](http://brainstorm.untergrund.net): the team who produced the Amiga MOD composition, "Axel Goes Funky"  
 * [Tino Didreksen](https://tinodidriksen.com/2003/05/but-can-you-make-pong): writer of the article, "But Can You Make Pong"; a person who I once dismissed as a "nay-sayer" and have recently promoted to "prophet"
 * [Mattias Johansson](https://www.youtube.com/channel/UCO1cgjhGzsSYb1rsB4bFe4Q): creator of "FunFunFunction", a Monday-morning video show that keeps me amped about being a developer
