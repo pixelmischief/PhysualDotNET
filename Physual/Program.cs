@@ -40,7 +40,7 @@ namespace Physual
         //SFML
         public const int SCREEN_WIDTH = 1600;
         public const int SCREEN_HEIGHT = 1200;
-        public const string SCREEN_TITLE = "Physual C#";
+        public const string SCREEN_TITLE = "Physual .NET";
 
         public const float PIXELS_PER_METER_X = SCREEN_WIDTH / WORLD_WIDTH;
         public const float PIXELS_PER_METER_Y = SCREEN_HEIGHT / WORLD_HEIGHT;
@@ -57,8 +57,8 @@ namespace Physual
 
         public const string TEXT_FONT_FILE = "res\\pannetje_10.ttf";
         public const int TEXT_FONT_SIZE = 23;
-        public const string TEXT_MESSAGE_TOP = "Physual C#: Demonstration of a 2D Game Development Stack for .NET (C#, VelcroPhysics, and SFML.Net)";
-        public const string TEXT_MESSAGE_BOTTOM = "(S)low Debug      (P)ause      (C)ircular Puck      (M)usic Toggle      Arrows Nudge";
+        public const string TEXT_MESSAGE_TOP = "Physual .NET: Demonstration of a 2D Game Development Stack for .NET (C#, VelcroPhysics, and SFML.Net)";
+        public const string TEXT_MESSAGE_BOTTOM = "(S)low Debug      (P)ause      (C)ircular Puck      (M)usic Toggle      (ESC)ape      Arrows Nudge";
         public const int TEXT_MESSAGE_TOP_MARGIN = 4;
 
         //Game
@@ -280,7 +280,6 @@ namespace Physual
             bottomText.Position = new Vector2f(WORLD_UNIT * PIXELS_PER_METER_X, ((WORLD_HEIGHT - WORLD_UNIT) * PIXELS_PER_METER_Y) + TEXT_MESSAGE_TOP_MARGIN);
 
 
-
             //Sound Effects
             var sampler = new Sound[2];
             sampler[0] = new Sound(new SoundBuffer(SAMPLE_FILE_BEEP));
@@ -290,12 +289,12 @@ namespace Physual
             bool readyToPlaySoundEffect = true;
 
 
-
             //Music
             Music synthesizer = new Music(MUSIC_FILE);
             synthesizer.Loop = true;
             synthesizer.Volume = MUSIC_VOLUME;
             bool readyToToggleMusic = true;
+
 
 
             //*************
@@ -306,10 +305,10 @@ namespace Physual
             //Initialize Display
             var screen = new RenderWindow(new VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE);
 
-            
+
             //Cue Music
             synthesizer.Play();
-            
+
 
             //Initialize Clock
             var clock = new Clock();
@@ -358,6 +357,51 @@ namespace Physual
                 Shape ballSprite = Keyboard.IsKeyPressed(Keyboard.Key.C) ? (Shape)ballSpriteRound : (Shape)ballSpriteSquare;
 
 
+                //Press Arrow Keys to Nudge Ball
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Up) ||
+                    Keyboard.IsKeyPressed(Keyboard.Key.Down) ||
+                    Keyboard.IsKeyPressed(Keyboard.Key.Left) ||
+                    Keyboard.IsKeyPressed(Keyboard.Key.Right))
+                {
+                    readyToNudgeBall = false;
+
+                    Vector2 nudgedVelocity = ball.LinearVelocity;
+
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Up)) { nudgedVelocity = new Vector2(nudgedVelocity.X, nudgedVelocity.Y + BALL_NUDGE_AMOUNT); }
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Down)) { nudgedVelocity = new Vector2(nudgedVelocity.X, nudgedVelocity.Y - BALL_NUDGE_AMOUNT); }
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Left)) { nudgedVelocity = new Vector2(nudgedVelocity.X - BALL_NUDGE_AMOUNT, nudgedVelocity.Y); }
+                    if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) { nudgedVelocity = new Vector2(nudgedVelocity.X + BALL_NUDGE_AMOUNT, nudgedVelocity.Y); }
+
+                    ball.LinearVelocity = nudgedVelocity;
+                }
+                else
+                {
+                    readyToNudgeBall = true;
+                }
+
+
+                //Press 'M' to Toggle Music
+                if (Keyboard.IsKeyPressed(Keyboard.Key.M))
+                {
+                    if (readyToToggleMusic)
+                    {
+                        readyToToggleMusic = false;
+                        if (synthesizer.Status == SoundStatus.Playing)
+                        {
+                            synthesizer.Stop();
+                        }
+                        else
+                        {
+                            synthesizer.Play();
+                        }
+                    }
+                }
+                else
+                {
+                    readyToToggleMusic = true;
+                }
+
+
                 //Update Ball Sprite Position
                 ballSprite.Position = new Vector2f(
                     (int)((ball.Position.X - ball.FixtureList[0].Shape.Radius) * PIXELS_PER_METER_X),
@@ -393,50 +437,6 @@ namespace Physual
                 else
                 {
                     readyToPlaySoundEffect = true;
-                }
-
-
-                //Press Arrow Keys to Nudge Ball
-                if (Keyboard.IsKeyPressed(Keyboard.Key.Up) ||
-                    Keyboard.IsKeyPressed(Keyboard.Key.Down) ||
-                    Keyboard.IsKeyPressed(Keyboard.Key.Left) ||
-                    Keyboard.IsKeyPressed(Keyboard.Key.Right))
-                {
-                    readyToNudgeBall = false;
-                    Vector2 nudgedVelocity = ball.LinearVelocity;
-
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Up)) { nudgedVelocity = new Vector2(ball.LinearVelocity.X, ball.LinearVelocity.Y + BALL_NUDGE_AMOUNT); }
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Down)) { nudgedVelocity = new Vector2(ball.LinearVelocity.X, ball.LinearVelocity.Y - BALL_NUDGE_AMOUNT); }
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Left)) { nudgedVelocity = new Vector2(ball.LinearVelocity.X - BALL_NUDGE_AMOUNT, ball.LinearVelocity.Y); }
-                    if (Keyboard.IsKeyPressed(Keyboard.Key.Right)) { nudgedVelocity = new Vector2(ball.LinearVelocity.X + BALL_NUDGE_AMOUNT, ball.LinearVelocity.Y); }
-
-                    ball.LinearVelocity = nudgedVelocity;
-                }
-                else
-                {
-                    readyToNudgeBall = true;
-                }
-
-
-                //Press 'M' to Toggle Music
-                if (Keyboard.IsKeyPressed(Keyboard.Key.M))
-                {
-                    if (readyToToggleMusic)
-                    {
-                        readyToToggleMusic = false;
-                        if (synthesizer.Status == SoundStatus.Playing)
-                        {
-                            synthesizer.Stop();
-                        }
-                        else
-                        {
-                            synthesizer.Play();
-                        }
-                    }
-                }
-                else
-                {
-                    readyToToggleMusic = true;
                 }
             }
         }
